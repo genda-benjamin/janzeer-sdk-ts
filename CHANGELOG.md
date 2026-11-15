@@ -3,6 +3,19 @@
 All notable changes to `janzeer-sdk` are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [SemVer](https://semver.org/).
 
+## [0.1.9] — 2026-11-15
+
+### Fixed
+- **`JanzeerRpc.getGenesis()` / `JanzeerRpcWs.getGenesis()`** now return the network's genesis **document**
+  (`specVersion`, `networkId`, `signerPublicKey`, `anchors`, …) as a `JsonValue`. They used to map the answer to a
+  `GenesisBlock`, which `janzeer_getGenesis` never returns, so every call threw `TypeError: expected integer`.
+  The return type changes from `Promise<GenesisBlock>` to `Promise<JsonValue>`; the REST `blocks.genesis.*` calls
+  (epoch genesis blocks) are unchanged.
+
+### Added
+- Example `examples/06-watch-new-blocks.ts`: follow new blocks over the WebSocket (`EXAMPLE_BLOCKS` stops after N).
+  Contributed by @RaoroniRonaldo (#5).
+
 ## [0.1.8] — 2026-11-13
 
 Verified against node **0.1.14** (REST envelope 1.1.0 / protocol 3.4.0). No API change.

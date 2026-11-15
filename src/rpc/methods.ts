@@ -2,7 +2,7 @@
 import type { JsonValue } from '../json.js';
 import { asString, asBool, asArray } from '../json.js';
 import type { SignedTx } from '../tx/types.js';
-import { mapTokenBalance, mapToken, mapGenesisBlock, type TokenBalance, type Token, type GenesisBlock } from '../rest/models.js';
+import { mapTokenBalance, mapToken, type TokenBalance, type Token } from '../rest/models.js';
 import {
   mapAccountView, mapBlockView, mapChainSpecView, mapEpochView, mapFeeEstimate, mapMethodSpec, mapNodeInfoView, mapRpcPage, mapSendResult, mapStatsView, mapTxView, mapValidatorInfo,
   type AccountView, type AddressTransactions, type BlockView, type ChainSpecView, type EpochView, type FeeEstimate, type FeeKind, type NodeInfoView, type RpcMethodSpec, type RpcPage, type SendResult, type StatsView, type TxView, type ValidatorInfo,
@@ -27,8 +27,9 @@ export abstract class RpcMethods implements RpcTransport {
   methods(): Promise<RpcMethodSpec[]> {
     return this.call('janzeer_methods').then((v) => asArray(v).map(mapMethodSpec));
   }
-  getGenesis(): Promise<GenesisBlock> {
-    return this.call('janzeer_getGenesis').then(mapGenesisBlock);
+  /** The network's public genesis document (`specVersion`, `networkId`, `anchors`, …) as JSON — not a block. */
+  getGenesis(): Promise<JsonValue> {
+    return this.call('janzeer_getGenesis');
   }
   getInfo(): Promise<NodeInfoView> {
     return this.call('janzeer_getInfo').then(mapNodeInfoView);
